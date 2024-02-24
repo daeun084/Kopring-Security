@@ -2,6 +2,7 @@ package com.example.Kopring.domain.member.controller
 
 import com.example.Kopring.domain.member.dto.MemberRequestDto
 import com.example.Kopring.domain.member.service.MemberService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,7 +14,7 @@ class MemberController (
         private val memberService: MemberService
 ){
     @PostMapping("/signup")
-    fun signUp(@RequestBody memberRequestDto: MemberRequestDto): String{
+    fun signUp(@RequestBody @Valid memberRequestDto: MemberRequestDto): String{
         return memberService.signup(memberRequestDto)
     }
 }
