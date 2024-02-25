@@ -1,5 +1,6 @@
 package com.example.Kopring.global.authority
 
+import com.example.Kopring.global.config.CustomUser
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
@@ -37,6 +38,7 @@ class JwtTokenProvider {
                 .builder()
                 .setSubject(authentication.name)
                 .claim("auth", authorities) //"auth"라는 이름으로 권한들을 토큰에 담아줌
+                .claim("userId", (authentication.principal as CustomUser).userId ) //userId 같이 저장
                 .setIssuedAt(now) //발행된 시간
                 .setExpiration(accessExpiration) //유효기간
                 .signWith(key, SignatureAlgorithm.HS256) //키 생성에 사용한 알고리즘 명시
@@ -53,13 +55,16 @@ class JwtTokenProvider {
 
         //claim 내부에 있는 string type의 authorities 추출
         val auth = claims["auth"] ?: throw RuntimeException("잘못된 토큰입니다.")
+        //userId 추출
+        val userId = claims["userId"] ?: throw RuntimeException("잘못된 토큰입니다.")
+
 
         //권한 정보 추출
         val authorities: Collection<GrantedAuthority> = (auth as String) //string type으로 캐스팅
                 .split(",")
                 .map{ SimpleGrantedAuthority(it)} //","을 기준으로 잘라 Collection에 담아줌
 
-        val principal : UserDetails = User(claims.subject, "", authorities)
+        val principal : UserDetails = CustomUser(userId.toString().toLong(), claims.subject, "", authorities)
 
         return UsernamePasswordAuthenticationToken(principal, "", authorities)
     }

@@ -20,7 +20,8 @@ class CustomUserDetailsService (
                 ?.let { createUserDetails(it) } ?: throw UsernameNotFoundException("존재하지 않는 유저입니다")
 
     private fun createUserDetails(member: Member): UserDetails =
-            User(
+            CustomUser(
+                    member.id!!, //custom User 사용해 member id 같이 저장
                     member.loginId,
                     passwordEncoder.encode(member.password),
                     member.memberRole!!.map { SimpleGrantedAuthority("ROLE_${it.role}") }

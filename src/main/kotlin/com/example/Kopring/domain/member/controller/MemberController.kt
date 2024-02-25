@@ -5,8 +5,10 @@ import com.example.Kopring.domain.member.dto.MemberRequestDto
 import com.example.Kopring.domain.member.dto.MemberResponseDto
 import com.example.Kopring.domain.member.service.MemberService
 import com.example.Kopring.global.authority.TokenInfo
+import com.example.Kopring.global.config.CustomUser
 import com.example.Kopring.global.response.BaseResponse
 import jakarta.validation.Valid
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -31,9 +33,12 @@ class MemberController (
         return BaseResponse(data = tokenInfo)
     }
 
-    @GetMapping("/info/{id}")
-    fun getMyInfo(@PathVariable id: Long):BaseResponse<MemberResponseDto>{
-        val response = memberService.getMyInfo(id)
+    @GetMapping("/info")
+    fun getMyInfo():BaseResponse<MemberResponseDto>{
+        //contextHolder에 저장된 userId 추출
+        val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+
+        val response = memberService.getMyInfo(userId)
         return BaseResponse(data = response)
     }
 }
