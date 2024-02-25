@@ -31,6 +31,13 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	//security
+	implementation("org.springframework.boot:spring-boot-starter-security:3.2.3")
+	//jwt
+	implementation("io.jsonwebtoken:jjwt-api:0.12.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
+
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
