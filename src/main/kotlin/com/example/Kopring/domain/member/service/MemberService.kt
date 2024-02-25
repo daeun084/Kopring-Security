@@ -51,4 +51,10 @@ class MemberService (
         val member : Member = memberRepository.findByIdOrNull(id) ?: throw InvalidInputException("id", "존재하지 않는 유저입니다")
         return member.toDto()
     }
+
+    fun saveMyInfo(memberRequestDto: MemberRequestDto): String{
+        val member: Member = memberRequestDto.toEntity()
+        memberRepository.save(member)
+        return "내 정보 수정이 완료되었습니다"
+    }
 }
