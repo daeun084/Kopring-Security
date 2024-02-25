@@ -3,6 +3,7 @@ package com.example.Kopring.domain.member.service
 import com.example.Kopring.domain.member.dto.MemberRequestDto
 import com.example.Kopring.domain.member.entity.Member
 import com.example.Kopring.domain.member.repository.MemberRepository
+import com.example.Kopring.global.exception.InvalidInputException
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,18 +14,9 @@ class MemberService (
         //id 중복 검사
         var member: Member? = memberRepository.findByLoginId(memberRequestDto.loginId)
         if(member != null)
-            return "이미 등록된 ID입니다."
+            throw InvalidInputException("이미 등록된 ID입니다.")
 
-        member = Member(
-                null,
-                memberRequestDto.loginId,
-                memberRequestDto.password,
-                memberRequestDto.name,
-                memberRequestDto.birthDate,
-                memberRequestDto.gender,
-                memberRequestDto.email
-        )
-
+        member = memberRequestDto.toEntity()
         memberRepository.save(member)
         return "회원가입이 완료되었습니다."
     }

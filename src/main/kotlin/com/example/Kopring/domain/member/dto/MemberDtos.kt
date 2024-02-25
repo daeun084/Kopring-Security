@@ -1,5 +1,6 @@
 package com.example.Kopring.domain.member.dto
 
+import com.example.Kopring.domain.member.entity.Member
 import com.example.Kopring.global.annotation.ValidEnum
 import com.example.Kopring.global.enums.Gender
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -60,5 +61,8 @@ data class MemberRequestDto(
 
     private fun String.toLocalDate(): LocalDate =
             LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+    fun toEntity(): Member =
+            Member(id, loginId, password, name, birthDate, gender, email)
 }
 
