@@ -2,6 +2,7 @@ package com.example.Kopring.domain.member.service
 
 import com.example.Kopring.domain.member.dto.MemberLoginDto
 import com.example.Kopring.domain.member.dto.MemberRequestDto
+import com.example.Kopring.domain.member.dto.MemberResponseDto
 import com.example.Kopring.domain.member.entity.Member
 import com.example.Kopring.domain.member.entity.MemberRole
 import com.example.Kopring.domain.member.repository.MemberRepository
@@ -10,6 +11,7 @@ import com.example.Kopring.global.authority.JwtTokenProvider
 import com.example.Kopring.global.authority.TokenInfo
 import com.example.Kopring.global.enums.Role
 import com.example.Kopring.global.exception.InvalidInputException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.stereotype.Service
@@ -43,5 +45,10 @@ class MemberService (
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
 
         return jwtTokenProvider.createToken(authentication)
+    }
+
+    fun getMyInfo(id: Long): MemberResponseDto {
+        val member : Member = memberRepository.findByIdOrNull(id) ?: throw InvalidInputException("id", "존재하지 않는 유저입니다")
+        return member.toDto()
     }
 }

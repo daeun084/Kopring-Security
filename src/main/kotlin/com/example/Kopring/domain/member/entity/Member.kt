@@ -1,9 +1,11 @@
 package com.example.Kopring.domain.member.entity
 
+import com.example.Kopring.domain.member.dto.MemberResponseDto
 import com.example.Kopring.global.enums.Gender
 import com.example.Kopring.global.enums.Role
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Entity
 @Table(
@@ -36,6 +38,13 @@ class Member(
 ){
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     val memberRole: List<MemberRole>? = null
+
+    fun toDto(): MemberResponseDto =
+            MemberResponseDto(id!!, loginId, name, birthDate.formatDate(), gender.desc, email)
+
+    private fun LocalDate.formatDate(): String =
+            this.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+
 }
 
 @Entity
